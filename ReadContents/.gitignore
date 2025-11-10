@@ -3,7 +3,6 @@ bin/Debug/
 bin/Release/
 hiranaga/
 number/
-.vs/
-.vs/*.json
-obj/Debug/
-obj/Release/
+.vs/*
+obj/Debug/*
+obj/Release/*
