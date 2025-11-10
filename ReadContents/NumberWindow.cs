@@ -14,12 +14,14 @@ namespace ReadContents
             InitializeComponent();
             initializeWindow();
             createButtons();
+            createPictbox();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
         }
 
         CommonConst CONST_NUM = new CommonConst();
         private Button[] buttons;
+        private PictureBox[] pictureBoxes;
         private System.Media.SoundPlayer player = null;
 
         private void initializeWindow()
@@ -27,10 +29,8 @@ namespace ReadContents
             //サイズや配置の初期設定
             int vIndex = CONST_NUM.BTN_HEIGHT + CONST_NUM.BTN_SPACE;
             int hIndex = CONST_NUM.BTN_WIDTH + CONST_NUM.BTN_SPACE;
-            this.Height = vIndex * 3 + this.pictBox.Height + CONST_NUM.BTN_SPACE * 8;
+            this.Height = vIndex * 3 + CONST_NUM.PICT_HEIGHT * 2 + CONST_NUM.BTN_SPACE * 8;
             this.Width = hIndex * 4 + CONST_NUM.BTN_SPACE * 4;
-            this.pictBox.Location = new Point(hIndex - (CONST_NUM.BTN_SPACE * 3), vIndex * 3 + CONST_NUM.BTN_SPACE);
-            this.pictBox.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void createButtons()
@@ -70,6 +70,27 @@ namespace ReadContents
             }
         }
 
+        private void createPictbox()
+        {
+            int boxLocationX = CONST_NUM.BTN_SPACE * 4;
+            int boxLocationY = CONST_NUM.BTN_SPACE + (CONST_NUM.BTN_HEIGHT+ CONST_NUM.BTN_SPACE) * 3;
+
+            //1～9個の画像格納領域の初期化
+            this.pictureBoxes = new PictureBox[9];
+
+            for (int i = 0; i < pictureBoxes.Length; i++)
+            {
+                this.pictureBoxes[i] = new PictureBox();
+                this.pictureBoxes[i].Name = "pict" + (i + 1).ToString();
+                this.pictureBoxes[i].SizeMode = PictureBoxSizeMode.StretchImage;
+                this.pictureBoxes[i].Height = CONST_NUM.PICT_HEIGHT;
+                this.pictureBoxes[i].Width = CONST_NUM.PICT_WIDTH;
+                this.pictureBoxes[i].Top = boxLocationY + (i / 5) * CONST_NUM.PICT_HEIGHT;
+                this.pictureBoxes[i].Left = boxLocationX + (i % 5) * CONST_NUM.PICT_WIDTH;
+                this.Controls.Add(this.pictureBoxes[i]);
+            }
+        }
+
         private void btnClick(object sender, System.EventArgs e)
         {
             //引数のボタンオブジェクトをセット
@@ -82,8 +103,8 @@ namespace ReadContents
             string mediaDirectory = Path.Combine(parentDirectory, "number");
 
             //画像メディアを取得
-            string imageMediaPath = Path.Combine(mediaDirectory, btn.Text + ".jpg");
-            setImage(imageMediaPath);
+            string imageMediaPath = Path.Combine(mediaDirectory, "image.jpg");
+            setImage(imageMediaPath, int.Parse(btn.Text));
 
             //音声メディアのパスを取得
             string voiceFileName = btn.Text + ".wav";
@@ -96,19 +117,37 @@ namespace ReadContents
             }
         }
 
-        private void setImage(string imagePath)
+        private void setImage(string imagePath, int idx)
         {
-            //画像を読み込んでpictBoxに表示
+            //画像を読み込んでpictureBoxに表示
             try
             {
                 if (System.IO.File.Exists(imagePath))
                 {
-                    //Image.FromFileメソッドを使用
-                    this.pictBox.Image = Image.FromFile(imagePath);
-                }
-                else
-                {
-                    this.pictBox.Image = null;
+                    for (int i = 0; i < 9; i++)
+                    {
+                        //Image.FromFileメソッドを使用
+                        string pictboxName = "pict" + (i + 1).ToString();
+                        foreach (Control control in this.Controls)
+                        {
+                            if (control is PictureBox && control.Name == pictboxName)
+                            {
+                                PictureBox pictureBox = (PictureBox)control;
+
+                                if (idx > 0 && i < idx)
+                                {
+                                    pictureBox.Image = Image.FromFile(imagePath);
+                                }
+                                else
+                                {
+                                    pictureBox.Image = null;
+                                }
+
+                                break;
+                            }
+                        }
+
+                    }
                 }
             }
             catch (System.Exception ex)

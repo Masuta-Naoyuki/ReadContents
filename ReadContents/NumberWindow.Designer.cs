@@ -28,33 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictBox = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pictBox
-            // 
-            this.pictBox.Location = new System.Drawing.Point(81, 359);
-            this.pictBox.Name = "pictBox";
-            this.pictBox.Size = new System.Drawing.Size(296, 90);
-            this.pictBox.TabIndex = 1;
-            this.pictBox.TabStop = false;
             // 
             // NumberWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 461);
-            this.Controls.Add(this.pictBox);
+            this.ClientSize = new System.Drawing.Size(619, 576);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "NumberWindow";
             this.Text = "すうじのよみかた";
-            ((System.ComponentModel.ISupportInitialize)(this.pictBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictBox;
     }
 }
